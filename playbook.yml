@@ -1,0 +1,39 @@
+---
+- name: Ansible Playbook for Installing Fleskex on Ubuntu 18.04 Host
+  hosts: Server_Flaskex
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  vars:
+    home_dir: "{{ lookup('env', 'HOME') }}"
+
+  tasks:
+    - name: Installs git and pyton
+      apt:
+        pkg:
+        - git
+        - python3-pip
+        update_cache: yes
+        autoclean: yes
+
+    - name: Add the user 'flaskex' 
+      user: name=flaskex shell=/bin/bash
+  
+    - name: Deploy Fleskex
+      git: repo=https://github.com/anfederico/Flaskex dest=/home/flaskex/Flaskex
+      become: true
+      become_user: flaskex
+      become_method: su
+
+    - name: install Fleskex python requiprements
+      pip:
+        requirements: /home/flaskex/Flaskex/requirements.txt 
+
+    - name: start Flaskex
+      shell: cd /home/flaskex/Flaskex && python3 app.py&
+      become: true
+      become_user: flaskex
+      become_method: su
+...

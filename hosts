@@ -1,0 +1,2 @@
+[Server_Flaskex]
+ubuntu1 ansible_host=10.0.2.16 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=1234qwer
